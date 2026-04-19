@@ -33,7 +33,7 @@ def SIFT(original, frame, kp1=None, des1=None):
 
     good_matches = []
     for m, n in matches:
-        if m.distance < 0.75 * n.distance:
+        if m.distance < 0.25 * n.distance:
             good_matches.append(m)
 
     good_matches = sorted(good_matches, key=lambda x: x.distance)[:50]
@@ -87,7 +87,7 @@ while True:
 
     try:
         src_pts, dst_pts = SIFT(book_img, frame, kp1=kp1, des1=des1)
-        H, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+        H = compute_homography(src_pts, dst_pts)
         result = overlay_ar_frame(frame, cropped_ar, H, w, h)
     except Exception as e:
         print(f"Skipping frame: {e}")
